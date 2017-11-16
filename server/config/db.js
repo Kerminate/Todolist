@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-const Todolist = new Sequelize('mysql://root:@localhost/todolist', {
+const Todolist = new Sequelize('mariadb://root:@localhost/todolist', {
   define: {
     timestamps: false
   }
