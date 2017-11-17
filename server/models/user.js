@@ -1,5 +1,5 @@
 const db = require('../config/db.js')
-const userModel = require('../schema/user.js')
+const userModel = '../schema/user.js'
 const ToDolistDb = db.Todolist
 
 const User = ToDolistDb.import(userModel)

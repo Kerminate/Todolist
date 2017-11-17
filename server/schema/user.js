@@ -1,4 +1,4 @@
-export default function (sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {
       type: DataTypes.INTEGER(11),
@@ -7,11 +7,11 @@ export default function (sequelize, DataTypes) {
       autoIncrement: true
     },
     user_name: {
-      type: DataTypes.VARCHAR(255),
+      type: DataTypes.CHAR(255),
       allowNull: false
     },
     password: {
-      type: DataTypes.VARCHAR(255),
+      type: DataTypes.CHAR(255),
       allowNull: false
     }
   }, {

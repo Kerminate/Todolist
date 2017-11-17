@@ -1,4 +1,4 @@
-export default function (sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('list', {
     id: {
       type: DataTypes.INTEGER(11),
@@ -11,7 +11,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false
     },
     content: {
-      type: DataTypes.VARCHAR(255),
+      type: DataTypes.CHAR(255),
       allowNull: false
     },
     status: {
