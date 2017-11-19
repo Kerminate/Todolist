@@ -11,10 +11,14 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.17.1",
+    "bcryptjs": "^2.4.3",
     "element-ui": "^2.0.4",
+    "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-json": "^2.0.2",
+    "koa-jwt": "^3.2.2",
     "koa-logger": "^3.1.0",
     "koa-router": "^7.3.0",
     "mariadb": "^0.0.2-security",

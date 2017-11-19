@@ -4,11 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import Vuerouter from 'vue-router'
 import ElementUI from 'element-ui'
+import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import Login from './components/Login'
 import Todolist from './components/Todolist'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 Vue.use(ElementUI)
 Vue.use(Vuerouter)

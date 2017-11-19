@@ -23,7 +23,27 @@ export default {
   },
   methods: {
     loginTodo () {
-      this.$router.push('/todolist')
+      let obj = {
+        name: this.account,
+        password: this.password
+      }
+      this.$http.post('/auth/user', obj).then((res) => { // axios返回的数据都在res.data里
+        if (res.data.success) {
+          window.sessionStorage.setItem('demo-token', res.data.token) // 用sessionStorage把token存下来
+          this.$message({
+            type: 'success',
+            message: '登录成功'
+          })
+          this.$router.push('/todolist') // 进入todolist页面，登录成功
+        } else {
+          this.$message.error(res.data.info) // 登录失败，显示提示语
+          window.sessionStorage.setItem('demo-token', null) // 将token清空
+        }
+      }, (err) => {
+        console.log(err)
+        this.$message.error('请求错误！')
+        window.sessionStorage.setItem('demo-token', null) // 将token清空
+      })
     }
   }
 }
