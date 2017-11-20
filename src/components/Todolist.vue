@@ -15,7 +15,7 @@
                     {{index + 1}}. {{item.content}}
                   </span>
                   <span class="pull-right">
-                    <el-button size="small" type="primary" @click="finished(index)">完成</el-button>
+                    <el-button size="small" type="primary" @click="update(index)">完成</el-button>
                     <el-button size="small" :plain="true" type="danger" @click="remove(index)">删除</el-button>
                   </span>
                 </div>
@@ -49,14 +49,28 @@
 </template>
 
 <script>
+import jwt from 'jsonwebtoken'
+
 export default {
+  created () { // 组件创建时调用
+    const userInfo = this.getUserInfo() // 新增一个获取用户信息的方法
+    if (userInfo !== null) {
+      this.id = userInfo.id
+      this.name = userInfo.name
+    } else {
+      this.id = ''
+      this.name = ''
+    }
+    this.getTodolist()
+  },
   data () {
     return {
-      name: 'Molunerfinn',
+      name: '',
       todos: '',
       activeName: 'first',
       list: [],
-      count: 0
+      count: 0,
+      id: '' // 新增用户id属性，用于区别用户
     }
   },
   computed: {
@@ -81,24 +95,58 @@ export default {
       }
       let obj = {
         status: false,
-        content: this.todos
+        content: this.todos,
+        id: this.id
       }
-      this.list.push(obj)
+      this.$http.post('/api/todolist', obj).then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '创建成功!'
+          })
+          this.getTodolist()
+        } else {
+          this.$message.error('创建失败!')
+        }
+      }, (err) => {
+        this.$message.error('创建失败!')
+        console.log(err)
+      })
       this.todos = ''
     },
-    finished (index) {
-      this.$set(this.list[index], 'status', true)
-      this.$message({
-        type: 'success',
-        message: '任务完成'
-      })
+    update (index) {
+      this.$http.put('/api/todolist' + this.id + '/' + this.list[index].id + '/' + this.list[index].status)
+        .then((res) => {
+          if (res.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '任务状态更新成功!'
+            })
+            this.getTodolist()
+          } else {
+            this.$message.error('任务状态更新失败!')
+          }
+        }, (err) => {
+          this.$message.error('任务状态更新失败!')
+          console.log(err)
+        })
     },
     remove (index) {
-      this.list.splice(index, 1)
-      this.$message({
-        type: 'info',
-        message: '任务删除'
-      })
+      this.$http.delete('/api/todolist' + this.id + '/' + this.list[index].id + '/')
+        .then((res) => {
+          if (res.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '任务删除成功!'
+            })
+            this.getTodolist()
+          } else {
+            this.$message.error('任务删除失败!')
+          }
+        }, (err) => {
+          this.$message.error('任务删除失败!')
+          console.log(err)
+        })
     },
     restore (index) {
       this.$set(this.list[index], 'status', false)
@@ -106,6 +154,29 @@ export default {
         type: 'info',
         message: '任务还原'
       })
+    },
+    getUserInfo () { // 获取用户信息
+      const token = window.sessionStorage.getItem('demo-token')
+      if (token !== null && token !== 'null') {
+        let decode = jwt.decode(token) // 解析token
+        return decode // decode解析出来实际上就是{name: XXX,id: XXX}
+      } else {
+        return null
+      }
+    },
+    getTodolist () {
+      const getTodolist = this.$http.get('/api/todolist' + this.id)
+        .then((res) => {
+          if (res.status === 200) {
+            this.list = res.data.result
+          } else {
+            this.$message.error('获取列表失败!')
+          }
+        }, (err) => {
+          this.$message.error('获取列表失败!')
+          console.log(err)
+        })
+      return getTodolist
     }
   }
 }

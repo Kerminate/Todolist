@@ -14,10 +14,8 @@ const postUserAuth = async (ctx) => {
   const userInfo = await user.getUserByName(data.name)
 
   if (userInfo !== null) { // 如果查无此用户会返回null
-    console.log(userInfo.password + ':' + typeof userInfo.password + ' ' + data.password + ':' + typeof data.password)
-    // if (!bcrypt.compareSync(data.password, userInfo.password)) { // 同步的密码验证
-    if (data.password !== userInfo.password) {
-      console.log('fail')
+    if (!bcrypt.compareSync(data.password, userInfo.password)) { // 同步的密码验证
+    // if (data.password !== userInfo.password) {
       ctx.body = {
         success: false, // success标志位是方便前端判断返回是正确与否
         info: 'password error!'
@@ -33,7 +31,6 @@ const postUserAuth = async (ctx) => {
         success: true,
         token: token // 返回token
       }
-      console.log(token)
     }
   } else {
     ctx.body = {
