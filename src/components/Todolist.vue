@@ -115,7 +115,7 @@ export default {
       this.todos = '' // 将当前todos清空
     },
     update (index) {
-      this.$http.put('/api/todolist' + this.id + '/' + this.list[index].id + '/' + this.list[index].status)
+      this.$http.put('/api/todolist/' + this.id + '/' + this.list[index].id + '/' + this.list[index].status)
         .then((res) => {
           if (res.status === 200) {
             this.$message({
@@ -132,7 +132,7 @@ export default {
         })
     },
     remove (index) {
-      this.$http.delete('/api/todolist' + this.id + '/' + this.list[index].id + '/')
+      this.$http.delete('/api/todolist/' + this.id + '/' + this.list[index].id)
         .then((res) => {
           if (res.status === 200) {
             this.$message({
