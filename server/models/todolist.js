@@ -23,7 +23,34 @@ const createTodolist = async (data) => { // 给某个用户创建一条todolist
   return true
 }
 
+const removeTodolist = async (id, userId) => {
+  const result = await Todolist.destory({
+    where: {
+      id,
+      user_id: userId
+    }
+  })
+  return result === 1
+}
+
+const updateTodolist = async (id, userId, status) => {
+  const result = await Todolist.update(
+    {
+      status
+    },
+    {
+      where: {
+        id,
+        user_id: userId
+      }
+    }
+  )
+  return result[0] === 1
+}
+
 module.exports = {
   getTodolistById,
-  createTodolist
+  createTodolist,
+  removeTodolist,
+  updateTodolist
 }

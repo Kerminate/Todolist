@@ -34,7 +34,7 @@
                   {{index + 1}}. {{item.content}}
                 </span>
                 <span class="pull-right">
-                  <el-button size="small" type="primary" @click="restore(index)">还原</el-button>
+                  <el-button size="small" type="primary" @click="update(index)">还原</el-button>
                 </span>
               </div>
             </template>
@@ -148,13 +148,6 @@ export default {
           console.log(err)
         })
     },
-    restore (index) {
-      this.$set(this.list[index], 'status', false)
-      this.$message({
-        type: 'info',
-        message: '任务还原'
-      })
-    },
     getUserInfo () { // 获取用户信息
       const token = window.sessionStorage.getItem('demo-token')
       if (token !== null && token !== 'null') {
@@ -165,7 +158,7 @@ export default {
       }
     },
     getTodolist () {
-      const getTodolist = this.$http.get('/api/todolist' + this.id) // 向后端发送获取todolist的请求
+      const getTodolist = this.$http.get('/api/todolist/' + this.id) // 向后端发送获取todolist的请求
         .then((res) => {
           if (res.status === 200) {
             this.list = res.data.result // 将获取的信息塞入实例里的list
