@@ -99,20 +99,20 @@ export default {
         id: this.id
       }
       this.$http.post('/api/todolist', obj).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200) { // 当返回的状态为200成功时
           this.$message({
             type: 'success',
             message: '创建成功!'
           })
-          this.getTodolist()
+          this.getTodolist() // 获得最新的todolist
         } else {
-          this.$message.error('创建失败!')
+          this.$message.error('创建失败!') // 当返回不是200说明处理出问题
         }
       }, (err) => {
-        this.$message.error('创建失败!')
+        this.$message.error('创建失败!') // 当没有返回值说明服务端错误或者请求没发送出去
         console.log(err)
       })
-      this.todos = ''
+      this.todos = '' // 将当前todos清空
     },
     update (index) {
       this.$http.put('/api/todolist' + this.id + '/' + this.list[index].id + '/' + this.list[index].status)
@@ -165,10 +165,10 @@ export default {
       }
     },
     getTodolist () {
-      const getTodolist = this.$http.get('/api/todolist' + this.id)
+      const getTodolist = this.$http.get('/api/todolist' + this.id) // 向后端发送获取todolist的请求
         .then((res) => {
           if (res.status === 200) {
-            this.list = res.data.result
+            this.list = res.data.result // 将获取的信息塞入实例里的list
           } else {
             this.$message.error('获取列表失败!')
           }
