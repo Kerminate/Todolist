@@ -4,6 +4,9 @@ const json = require('koa-json')
 const logger = require('koa-logger')
 const koaBodyparser = require('koa-bodyparser')
 const jwt = require('koa-jwt')
+const path = require('path')
+const serve = require('koa-static')
+const historyApiFallback = require('koa2-history-api-fallback')
 const auth = require('./server/routes/auth.js')
 const api = require('./server/routes/api.js')
 
@@ -43,13 +46,12 @@ app.on('error', (err, ctx) => {
 })
 
 router.use('/auth', auth.routes()) // 挂载到koa-router上，同时会让所有的auth的请求路径前面加上'/auth'的请求路径。
-// router.use('/api', jwt({secret: 'vue-koa-demo'}), api.routes()) // 所有走/api/打头的请求都需要经过jwt中间件的验证。secret密钥必须跟我们当初签发的secret一致
-router.use('/api', api.routes())
+router.use('/api', jwt({secret: 'vue-todolist'}), api.routes()) // 所有走/api/打头的请求都需要经过jwt中间件的验证。secret密钥必须跟我们当初签发的secret一致
 
-app.use(router.routes())
+app.use(router.routes()) // 将路由规则挂载到Koa上
+app.use(historyApiFallback()) // 将这两个中间件挂载在api的路由之后
+app.use(serve(path.resolve('dist'))) // 将webpack打包好的项目目录作为Koa静态文件服务的目录
 
-app.listen(8889, () => {
+module.exports = app.listen(8889, () => {
   console.log('koa is listening in 8889')
 })
-
-module.exports = app

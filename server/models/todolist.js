@@ -24,7 +24,7 @@ const createTodolist = async (data) => { // 给某个用户创建一条todolist
 }
 
 const removeTodolist = async (id, userId) => {
-  const result = await Todolist.destory({
+  const result = await Todolist.destroy({
     where: {
       id,
       user_id: userId
